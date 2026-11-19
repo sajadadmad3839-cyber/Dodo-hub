@@ -1,20 +1,20 @@
 local Repo = "https://githubusercontent.com"
 local PlaceId = tostring(game.PlaceId)
+
 local function SafeLoad(path)
     local success, result = pcall(function()
         return game:HttpGet(Repo .. path)
     end)
-    if success and result and not result:find("404: Not Found") then
-        loadstring(result)()
-        return true
+    if success and result and not result:find("404: Not Found") and #result > 10 then
+        local func, err = loadstring(result)
+        if func then
+            task.spawn(func)
+            return true
+        end
     end
     return false
 end
 
--- Check if a specialized game module exists first
-local hasGameModule = SafeLoad("games/" .. PlaceId .. ".lua")
-
--- If no specialized module exists, fall back to Universal Hub
-if not hasGameModule then
+if not SafeLoad("games/" .. PlaceId .. ".lua") then
     SafeLoad("universal.lua")
 end
