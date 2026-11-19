@@ -1,6 +1,5 @@
 local Repo = "https://githubusercontent.com"
 local PlaceId = tostring(game.PlaceId)
-
 local function SafeLoad(path)
     local success, result = pcall(function()
         return game:HttpGet(Repo .. path)
